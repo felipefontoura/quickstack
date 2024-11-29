@@ -1,0 +1,39 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    entrypoint: docker-entrypoint.sh
+    command: rabbitmq-server
+    networks:
+      - network_public
+    ports:
+      - 5672:5672
+    hostname: rabbitmq
+    volumes:
+      - /mnt/db/rabbitmq:/var/lib/rabbitmq/
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=secret
+      - RABBITMQ_DEFAULT_VHOST=default
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=secret
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: 1
+          memory: 256M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.website.com`)
+        - traefik.http.routers.rabbitmq.entrypoints=websecure
+        - traefik.http.routers.rabbitmq.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.rabbitmq.service=rabbitmq
+        - traefik.http.services.rabbitmq.loadbalancer.server.port=15672
+        - traefik.http.services.rabbitmq.loadbalancer.passHostHeader=true
+networks:
+  network_public:
+    name: network_public
+    external: true

@@ -1,0 +1,62 @@
+services:
+  typebot_viewer:
+    image: baptistearno/typebot-viewer:3.0.1
+    networks:
+      - network_public
+    environment:
+      - DATABASE_URL=postgresql://typebot:secret@postgres:5432/typebot
+
+      - ENCRYPTION_SECRET=secret
+
+      - DEFAULT_WORKSPACE_PLAN=UNLIMITED
+
+      - NEXTAUTH_URL=https://builder.bot.website.com
+      - NEXT_PUBLIC_VIEWER_URL=https://bot.website.com
+      - NEXTAUTH_URL_INTERNAL=http://localhost:3000
+
+      - DISABLE_SIGNUP=true
+
+      - ADMIN_EMAIL=exemple@example.com
+
+      - NEXT_PUBLIC_SMTP_FROM='Typebot' <no-reply@website.com>
+      - SMTP_AUTH_DISABLED=false
+
+      - SMTP_HOST=smtp.host.com
+      - SMTP_USERNAME=username
+      - SMTP_PASSWORD=secret
+      - SMTP_PORT=587
+      - SMTP_SECURE=true
+
+      - NEXT_PUBLIC_GOOGLE_API_KEY=xxx
+      - GOOGLE_CLIENT_ID=xxx
+      - GOOGLE_CLIENT_SECRET=xxx
+
+      - S3_ACCESS_KEY=xxx
+      - S3_SECRET_KEY=xxx
+      - S3_BUCKET=website.com-typebot
+      - S3_REGION=us-east-1
+      - S3_ENDPOINT=s3.us-east-1.amazonaws.com
+
+      - NEXT_PUBLIC_GIPHY_API_KEY=xxx
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: 0.5
+          memory: 768M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.typebot_viewer.rule=Host(`bot.website.com`)
+        - traefik.http.routers.typebot_viewer.entrypoints=websecure
+        - traefik.http.routers.typebot_viewer.tls.certresolver=letsencryptresolver
+        - traefik.http.services.typebot_viewer.loadbalancer.server.port=3000
+        - traefik.http.services.typebot_viewer.loadbalancer.passHostHeader=true
+        - traefik.http.routers.typebot_viewer.service=typebot_viewer
+networks:
+  network_public:
+    external: true
+    name: network_public

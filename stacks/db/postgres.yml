@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    networks:
+      - network_public
+    entrypoint: docker-entrypoint.sh
+    command: [postgres, --max_connections=200]
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_INITDB_ARGS="--auth-host=scram-sha-256"
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: 0.5
+          memory: 256M
+networks:
+  network_public:
+    external: true
+    name: network_public
+volumes:
+  postgres-data:
+    driver: local

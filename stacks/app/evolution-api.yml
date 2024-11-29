@@ -1,0 +1,79 @@
+services:
+  evolution:
+    image: atendai/evolution-api:v2.1.2
+    command: ["node", "./dist/src/main.js"]
+    networks:
+      - network_public
+    volumes:
+      - evolution_instances:/evolution/instances
+      - evolution_store:/evolution/store
+    environment:
+      - SERVER_URL=https://api.evolution.website.com
+      - SERVER_PORT=8080
+      - DOCKER_ENV=true
+
+      - DEL_INSTANCE=false
+
+      - CONFIG_SESSION_PHONE_CLIENT=EvolutionAPI
+      - CONFIG_SESSION_PHONE_NAME=Chrome
+
+      - STORE_MESSAGES=true
+      - STORE_MESSAGE_UP=true
+      - STORE_CONTACTS=true
+      - STORE_CHATS=true
+
+      - CLEAN_STORE_CLEANING_INTERVAL=7200 # seconds === 2h
+      - CLEAN_STORE_MESSAGES=true
+      - CLEAN_STORE_MESSAGE_UP=true
+      - CLEAN_STORE_CONTACTS=true
+      - CLEAN_STORE_CHATS=true
+
+      - AUTHENTICATION_TYPE=apikey
+      - AUTHENTICATION_API_KEY=secret
+      - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
+
+      - QRCODE_LIMIT=30
+
+      - RABBITMQ_ENABLED=false
+
+      - DATABASE_ENABLED=true
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://evolution:secret@postgres:5432/evolution?schema=public
+      - DATABASE_SAVE_DATA_INSTANCE=true
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true
+      - DATABASE_SAVE_MESSAGE_UPDATE=true
+      - DATABASE_SAVE_DATA_CONTACTS=true
+      - DATABASE_SAVE_DATA_CHATS=true
+
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379/2
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: 0.5
+          memory: 256M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.evolution.rule=Host(`api.evolution.website.com`)
+        - traefik.http.routers.evolution.entrypoints=websecure
+        - traefik.http.routers.evolution.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.evolution.priority=1
+        - traefik.http.routers.evolution.service=evolution
+        - traefik.http.services.evolution.loadbalancer.server.port=8080
+        - traefik.http.services.evolution.loadbalancer.passHostHeader=true
+volumes:
+  evolution_instances:
+    external: true
+    name: evolution_instances
+  evolution_store:
+    external: true
+    name: evolution_store
+networks:
+  network_public:
+    name: network_public
+    external: true
