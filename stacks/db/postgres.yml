@@ -20,7 +20,7 @@ services:
           - node.role == manager
       resources:
         limits:
-          cpus: 0.5
+          cpus: "0.5"
           memory: 256M
 networks:
   network_public:
