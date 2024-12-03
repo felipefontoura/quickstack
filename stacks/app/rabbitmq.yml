@@ -9,7 +9,7 @@ services:
       - 5672:5672
     hostname: rabbitmq
     volumes:
-      - /mnt/db/rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq-data:/var/lib/rabbitmq/
     environment:
       - RABBITMQ_ERLANG_COOKIE=secret
       - RABBITMQ_DEFAULT_VHOST=default
@@ -37,3 +37,6 @@ networks:
   network_public:
     name: network_public
     external: true
+volumes:
+  rabbitmq-data:
+    driver: local
