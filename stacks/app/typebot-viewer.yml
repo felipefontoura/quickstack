@@ -20,11 +20,10 @@ services:
 
       - NEXT_PUBLIC_SMTP_FROM='Typebot' <no-reply@website.com>
       - SMTP_AUTH_DISABLED=false
-
-      - SMTP_HOST=smtp.host.com
-      - SMTP_USERNAME=username
-      - SMTP_PASSWORD=secret
+      - SMTP_HOST=smtp.sendgrid.net
       - SMTP_PORT=587
+      - SMTP_USERNAME=user
+      - SMTP_PASSWORD=secret
       - SMTP_SECURE=true
 
       - NEXT_PUBLIC_GOOGLE_API_KEY=xxx

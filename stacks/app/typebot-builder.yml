@@ -20,13 +20,6 @@ services:
 
       - NEXT_PUBLIC_SMTP_FROM='Typebot' <no-reply@website.com>
       - SMTP_AUTH_DISABLED=false
-
-      - SMTP_HOST=smtp.host.com
-      - SMTP_USERNAME=username
-      - SMTP_PASSWORD=secret
-      - SMTP_PORT=587
-      - SMTP_SECURE=true
-
       - SMTP_HOST=smtp.sendgrid.net
       - SMTP_PORT=587
       - SMTP_USERNAME=user
