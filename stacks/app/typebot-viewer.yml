@@ -16,7 +16,7 @@ services:
 
       - DISABLE_SIGNUP=true
 
-      - ADMIN_EMAIL=exemple@example.com
+      - ADMIN_EMAIL=example@example.com
 
       - NEXT_PUBLIC_SMTP_FROM='Typebot' <no-reply@website.com>
       - SMTP_AUTH_DISABLED=false
