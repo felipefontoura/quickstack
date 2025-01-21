@@ -17,12 +17,14 @@ Docker Swarm Stacks is a collection of pre-configured stack files designed to si
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/felipefontoura/docker-swarm-stacks.git
    cd docker-swarm-stacks
    ```
 
 2. Ensure Docker Swarm is initialized:
+
    ```bash
    docker swarm init
    ```
@@ -32,21 +34,25 @@ Docker Swarm Stacks is a collection of pre-configured stack files designed to si
 ## Usage
 
 1. Navigate to project path:
+
    ```bash
    cd docker-swarm-stacks
    ```
 
 2. Adjust stack file:
+
    ```bash
    nano stacks/<category>/<stack>.yml
    ```
 
 2. Run the docker
+
    ```bash
    docker stack deploy --prune --resolve-image always --compose-file ./<category>/<stack>.yml stack
    ```
 
 3. Monitor your services:
+
    ```bash
    docker service ls
    ```
@@ -58,6 +64,7 @@ Docker Swarm Stacks is a collection of pre-configured stack files designed to si
 ### Infrastructure
 
 - **[Traefik](stacks/infra/traefik.yml):** Application proxy and load balancer.
+- **[Portainer](stacks/infra/portainer.yml):** Platform manager for Docker and Swarm.
 
 ### Databases
 
@@ -88,4 +95,3 @@ For major changes, please open an issue first to discuss the proposal.
 ## License
 
 This repository is licensed under the [MIT License](https://choosealicense.com/licenses/mit/). Use, modify, and distribute freely!
-
