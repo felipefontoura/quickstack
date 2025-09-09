@@ -73,6 +73,7 @@ Docker Swarm Stacks is a collection of pre-configured stack files designed to si
 
 ### Applications
 
+- **[Chatwoot](stacks/app/chatwoot.yml):** The modern customer support tool for your business.
 - **[Evolution API](stacks/app/evolution-api.yml):** API framework for evolutionary development.
 - **[N8n](stacks/app/n8n.yml):** Workflow automation tool.
 - **[RabbitMQ](stacks/app/rabbitmq.yml):** Message broker for distributed systems, ideal for asynchronous communication and message queuing.
