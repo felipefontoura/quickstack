@@ -44,8 +44,19 @@ x-chatwoot-common: &chatwoot-common
     - AWS_SECRET_ACCESS_KEY=your-secret-access-key
     - S3_BUCKET_NAME=chatwoot-uploads
 
-    # Email Configuration
+    # Email configuration
     - MAILER_SENDER_EMAIL=Support <help@website.com>
+
+    # AWS SES
+    - SMTP_ADDRESS=email-smtp.us-east-1.amazonaws.com
+    - SMTP_AUTHENTICATION=plain
+    - SMTP_DOMAIN=website.com
+    - SMTP_ENABLE_STARTTLS_AUTO=true
+    - SMTP_PORT=587
+    - SMTP_USERNAME=apikey
+    - SMTP_PASSWORD=your-secret-access-key
+
+    # Sendgrid
     - SMTP_ADDRESS=smtp.sendgrid.net
     - SMTP_AUTHENTICATION=plain
     - SMTP_DOMAIN=website.com
