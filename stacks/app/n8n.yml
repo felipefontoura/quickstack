@@ -54,8 +54,22 @@ x-n8n-common: &n8n-common
 
     - NODE_FUNCTION_ALLOW_BUILTIN=*
     - NODE_FUNCTION_ALLOW_EXTERNAL=*
-    - N8N_COMMUNITY_PACKAGES_ENABLED=true
+    - N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=true
 
+    - N8N_RUNNERS_ENABLED=true
+    - OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=true
+
+
+    # AWS SES
+    # - N8N_EMAIL_MODE=smtp
+    # - N8N_SMTP_HOST=email-smtp.us-east-1.amazonaws.com
+    # - N8N_SMTP_PORT=587
+    # - N8N_SMTP_USER=user
+    # - N8N_SMTP_PASS=secret
+    # - N8N_SMTP_SENDER=
+    # - N8N_SMTP_SSL=true
+
+    # Sendgrid
     - N8N_EMAIL_MODE=smtp
     - N8N_SMTP_HOST=smtp.sendgrid.net
     - N8N_SMTP_PORT=587
