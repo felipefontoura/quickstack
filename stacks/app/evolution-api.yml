@@ -1,6 +1,6 @@
 services:
   evolution:
-    image: evoapicloud/evolution-api:v2.1.2
+    image: evoapicloud/evolution-api:v2.3.0
     command: ["node", "./dist/src/main.js"]
     networks:
       - network_public
