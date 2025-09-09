@@ -1,0 +1,174 @@
+x-chatwoot-common: &chatwoot-common
+  image: chatwoot/chatwoot:latest
+  volumes:
+    - chatwoot_data:/app/storage
+  networks:
+    - network_public
+  environment: &chatwoot-env
+    # Installation Configuration
+    - INSTALLATION_NAME=chatwoot
+
+    - INSTALLATION_ENV=docker
+    - NODE_ENV=production
+    - RAILS_ENV=production
+    - RAILS_LOG_TO_STDOUT=true
+    - LOG_LEVEL=debug
+    - RACK_TIMEOUT_SERVICE_TIMEOUT=600
+
+    # Security Configuration
+    - SECRET_KEY_BASE=secret
+    - FORCE_SSL=true
+
+    # Frontend Configuration
+    - FRONTEND_URL=https://chatwoot.website.com
+
+    # Localization
+    - DEFAULT_LOCALE=en
+
+    # Account Management
+    - ENABLE_ACCOUNT_SIGNUP=false
+
+    # Database Configuration
+    - POSTGRES_HOST=postgres
+    - POSTGRES_DATABASE=chatwoot
+    - POSTGRES_USERNAME=postgres
+    - POSTGRES_PASSWORD=secret
+
+    # Redis Configuration
+    - REDIS_URL=redis://redis:6379
+
+    # Storage Configuration (AWS S3)
+    - ACTIVE_STORAGE_SERVICE=amazon
+    - AWS_REGION=us-east-1
+    - AWS_ACCESS_KEY_ID=your-access-key-id
+    - AWS_SECRET_ACCESS_KEY=your-secret-access-key
+    - S3_BUCKET_NAME=chatwoot-uploads
+
+    # Email Configuration
+    - MAILER_SENDER_EMAIL=Support <help@website.com>
+    - SMTP_ADDRESS=smtp.sendgrid.net
+    - SMTP_AUTHENTICATION=plain
+    - SMTP_DOMAIN=website.com
+    - SMTP_ENABLE_STARTTLS_AUTO=true
+    - SMTP_PORT=587
+    - SMTP_USERNAME=apikey
+    - SMTP_PASSWORD=your-sendgrid-api-key
+
+    # Bot Configuration
+    - USE_INBOX_AVATAR_FOR_BOT=true
+
+    # Performance Configuration
+    - WEB_CONCURRENCY=2
+    - SIDEKIQ_CONCURRENCY=10
+
+    # Rate Limiting (optional)
+    # - ENABLE_RACK_ATTACK=true
+    # - RACK_ATTACK_LIMIT=3000
+  deploy: &chatwoot-deploy
+    mode: replicated
+    replicas: 1
+    placement:
+      constraints:
+        - node.role == manager
+    resources:
+      limits:
+        cpus: "1"
+        memory: 1024M
+      reservations:
+        cpus: "0.5"
+        memory: 512M
+    update_config:
+      parallelism: 1
+      delay: 30s
+      order: start-first
+      failure_action: rollback
+    restart_policy:
+      condition: on-failure
+      delay: 10s
+      max_attempts: 3
+
+##############
+#
+# Database Initialization:
+# Run this command once to prepare the database:
+# docker exec -it $(docker ps -q -f name=chatwoot_web) bundle exec rails db:chatwoot_prepare
+#
+# Environment Variables Documentation:
+# https://www.chatwoot.com/docs/self-hosted/configuration/environment-variables
+#
+# Default Values:
+# https://github.com/chatwoot/chatwoot/blob/develop/.env.example
+#
+#############
+
+services:
+  # Database Initialization Service (run once)
+  chatwoot_init:
+    <<: *chatwoot-common
+    command: bundle exec rails db:chatwoot_prepare
+    deploy:
+      mode: replicated
+      replicas: 0  # Set to 1 to run initialization, then scale back to 0
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+      restart_policy:
+        condition: none
+
+  # Main Web Application
+  chatwoot_web:
+    <<: *chatwoot-common
+    command: bundle exec rails s -p 3000 -b 0.0.0.0
+    entrypoint: docker/entrypoints/rails.sh
+    deploy:
+      <<: *chatwoot-deploy
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 768M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+      labels:
+        # Traefik Configuration
+        - traefik.enable=true
+        - traefik.http.routers.chatwoot_web.rule=Host(`chatwoot.example.com`)
+        - traefik.http.routers.chatwoot_web.entrypoints=websecure
+        - traefik.http.routers.chatwoot_web.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.chatwoot_web.service=chatwoot_web
+        - traefik.http.services.chatwoot_web.loadbalancer.server.port=3000
+        - traefik.http.services.chatwoot_web.loadbalancer.passhostheader=true
+        # SSL Headers Middleware
+        - traefik.http.middlewares.chatwoot-sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
+        - traefik.http.routers.chatwoot_web.middlewares=chatwoot-sslheader@docker
+
+  # Background Job Processor
+  chatwoot_sidekiq:
+    <<: *chatwoot-common
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    deploy:
+      <<: *chatwoot-deploy
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 768M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+
+volumes:
+  chatwoot_data:
+    external: true
+    name: chatwoot_data
+
+networks:
+  network_public:
+    external: true
+    name: network_public
