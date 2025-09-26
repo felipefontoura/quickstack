@@ -41,6 +41,7 @@ x-n8n-common: &n8n-common
     - N8N_ONBOARDING_FLOW_DISABLED=true
     - N8N_WORKFLOW_TAGS_DISABLED=false
     - N8N_HIDE_USAGE_PAGE=false
+    - N8N_PUBLIC_API_DISABLED=true
 
     - EXECUTIONS_DATA_PRUNE=true
     - EXECUTIONS_DATA_MAX_AGE=336 # 2 semanas
@@ -55,10 +56,10 @@ x-n8n-common: &n8n-common
     - NODE_FUNCTION_ALLOW_BUILTIN=*
     - NODE_FUNCTION_ALLOW_EXTERNAL=*
     - N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=true
+    - N8N_REINSTALL_MISSING_PACKAGES=false
 
     - N8N_RUNNERS_ENABLED=true
     - OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=true
-
 
     # AWS SES
     # - N8N_EMAIL_MODE=smtp
@@ -97,6 +98,8 @@ services:
   n8n_editor:
     <<: *n8n-common
     command: start
+    volumes:
+      - n8n-data:/home/node/.n8n
     deploy:
       <<: *n8n-deploy
       labels:
@@ -132,4 +135,6 @@ networks:
   network_public:
     name: network_public
     external: true
-
+volumes:
+  n8n-data:
+    driver: local
