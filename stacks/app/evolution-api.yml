@@ -36,6 +36,8 @@ services:
 
       - RABBITMQ_ENABLED=false
 
+      - CHATWOOT_ENABLED=true
+
       - DATABASE_ENABLED=true
       - DATABASE_PROVIDER=postgresql
       - DATABASE_CONNECTION_URI=postgresql://evolution:secret@postgres:5432/evolution?schema=public
