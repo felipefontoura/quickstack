@@ -1,5 +1,7 @@
 x-n8n-common: &n8n-common
-  image: n8nio/n8n:latest
+  image: n8n-custom:latest
+  build:
+    dockerfile: Dockerfile
   networks:
     - network_public
   environment: &n8n-env
