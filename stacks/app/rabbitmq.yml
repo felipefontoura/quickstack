@@ -30,6 +30,7 @@ services:
         - traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.website.com`)
         - traefik.http.routers.rabbitmq.entrypoints=websecure
         - traefik.http.routers.rabbitmq.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.rabbitmq.priority=2
         - traefik.http.routers.rabbitmq.service=rabbitmq
         - traefik.http.services.rabbitmq.loadbalancer.server.port=15672
         - traefik.http.services.rabbitmq.loadbalancer.passHostHeader=true

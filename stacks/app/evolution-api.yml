@@ -64,7 +64,7 @@ services:
         - traefik.http.routers.evolution.rule=Host(`api.evolution.website.com`)
         - traefik.http.routers.evolution.entrypoints=websecure
         - traefik.http.routers.evolution.tls.certresolver=letsencryptresolver
-        - traefik.http.routers.evolution.priority=1
+        - traefik.http.routers.evolution.priority=2
         - traefik.http.routers.evolution.service=evolution
         - traefik.http.services.evolution.loadbalancer.server.port=8080
         - traefik.http.services.evolution.loadbalancer.passHostHeader=true

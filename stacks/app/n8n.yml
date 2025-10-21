@@ -108,6 +108,7 @@ services:
         - traefik.http.routers.n8n_editor.rule=Host(`editor.n8n.website.com`)
         - traefik.http.routers.n8n_editor.entrypoints=websecure
         - traefik.http.routers.n8n_editor.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.n8n_editor.priority=2
         - traefik.http.routers.n8n_editor.service=n8n_editor
         - traefik.http.services.n8n_editor.loadbalancer.server.port=5678
         - traefik.http.services.n8n_editor.loadbalancer.passHostHeader=true
@@ -122,6 +123,7 @@ services:
         - traefik.http.routers.n8n_webhook.rule=Host(`webhooks.n8n.website.com`)
         - traefik.http.routers.n8n_webhook.entrypoints=websecure
         - traefik.http.routers.n8n_webhook.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.n8n_webhook.priority=2
         - traefik.http.routers.n8n_webhook.service=n8n_webhook
         - traefik.http.services.n8n_webhook.loadbalancer.server.port=5678
         - traefik.http.services.n8n_webhook.loadbalancer.passHostHeader=true
