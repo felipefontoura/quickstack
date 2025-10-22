@@ -118,7 +118,7 @@ services:
     command: bundle exec rails db:chatwoot_prepare
     deploy:
       mode: replicated
-      replicas: 0 # Set to 1 to run initialization, then scale back to 0
+      replicas: 1 # Set to 1 to run initialization, then scale back to 0
       placement:
         constraints:
           - node.role == manager
