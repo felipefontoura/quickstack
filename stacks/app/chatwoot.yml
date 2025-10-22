@@ -149,7 +149,7 @@ services:
       labels:
         # Traefik Configuration
         - traefik.enable=true
-        - traefik.http.routers.chatwoot_web.rule=Host(`chatwoot.example.com`)
+        - traefik.http.routers.chatwoot_web.rule=Host(`chatwoot.website.com`)
         - traefik.http.routers.chatwoot_web.entrypoints=websecure
         - traefik.http.routers.chatwoot_web.tls.certresolver=letsencryptresolver
         - traefik.http.routers.chatwoot_web.priority=2
