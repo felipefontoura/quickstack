@@ -48,7 +48,7 @@ Docker Swarm Stacks is a collection of pre-configured stack files designed to si
 2. Run the docker
 
    ```bash
-   docker stack deploy --prune --resolve-image always --compose-file ./<category>/<stack>.yml stack
+   docker stack deploy --prune --resolve-image always --compose-file ./<category>/<stack>/docker-compose.yml stack
    ```
 
 3. Monitor your services:
@@ -63,22 +63,22 @@ Docker Swarm Stacks is a collection of pre-configured stack files designed to si
 
 ### Infrastructure
 
-- **[Traefik](stacks/infra/traefik.yml):** Application proxy and load balancer.
-- **[Portainer](stacks/infra/portainer.yml):** Platform manager for Docker and Swarm.
+- **[Traefik](stacks/infra/traefik/):** Application proxy and load balancer.
+- **[Portainer](stacks/infra/portainer/):** Platform manager for Docker and Swarm.
 
 ### Databases
 
-- **[PostgreSQL](stacks/db/postgres.yml):** Relational database with advanced features.
-- **[Redis](stacks/db/redis.yml):** In-memory key-value store for caching and real-time analytics.
+- **[PostgreSQL](stacks/db/postgres/):** Relational database with advanced features.
+- **[Redis](stacks/db/redis/):** In-memory key-value store for caching and real-time analytics.
 
 ### Applications
 
-- **[Chatwoot](stacks/app/chatwoot.yml):** The modern customer support tool for your business.
-- **[Evolution API](stacks/app/evolution-api.yml):** API framework for evolutionary development.
-- **[N8n](stacks/app/n8n.yml):** Workflow automation tool.
-- **[Plunk](stacks/app/plunk.yml):** The Open-Source email platform.
-- **[RabbitMQ](stacks/app/rabbitmq.yml):** Message broker for distributed systems, ideal for asynchronous communication and message queuing.
-- **[Typebot](stacks/app/typebot.yml):** Chatbot builder for interactive conversations.
+- **[Chatwoot](stacks/app/chatwoot/):** The modern customer support tool for your business.
+- **[Evolution API](stacks/app/evolution-api/):** API framework for evolutionary development.
+- **[N8n](stacks/app/n8n/):** Workflow automation tool.
+- **[Plunk](stacks/app/plunk/):** The Open-Source email platform.
+- **[RabbitMQ](stacks/app/rabbitmq/):** Message broker for distributed systems, ideal for asynchronous communication and message queuing.
+- **[Typebot](stacks/app/typebot/):** Chatbot builder for interactive conversations.
 
 ---
 

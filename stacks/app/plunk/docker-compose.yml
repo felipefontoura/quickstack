@@ -4,8 +4,6 @@ services:
     entrypoint: ["/app/entry.sh"]
     networks:
       - network_public
-    ports:
-      - 3000:3000
     environment:
       - APP_URI=https://plunk.website.com
       - API_URI=https://plunk.website.com/api
@@ -20,7 +18,7 @@ services:
       - AWS_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=access-key
       - AWS_SECRET_ACCESS_KEY=secret-key
-      - AWS_SES_CONFIGURATION_SET=
+      - AWS_SES_CONFIGURATION_SET=config-set
 
       - DISABLE_SIGNUPS=true
     deploy:
