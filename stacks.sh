@@ -35,7 +35,7 @@ wait_for_service() {
       continue
     fi
 
-    local ready_services=$(docker stack services "${stack_name}" --format "{{.Replicas}}" 2>/dev/null | grep -c "1/1" || true)
+    local ready_services=$(docker stack services "${stack_name}" --format "{{.Replicas}}" 2>/dev/null | grep -cE "^([0-9]+)/\1$" || true)
  
     if [ "$ready_services" -eq "$total_services" ]; then
       print_success "All services in stack '${stack_name}' are ready (${ready_services}/${total_services})"
