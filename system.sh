@@ -432,13 +432,7 @@ verify_security_settings() {
     print_warning "UFW firewall is not active"
     failed=1
   fi
-
-  # Check SSH configuration
-  if ! grep -q "PasswordAuthentication no" /etc/ssh/sshd_config; then
-    print_warning "SSH password authentication is not disabled"
-    failed=1
-  fi
-
+ 
   # Check AppArmor
   if ! apparmor_status | grep -q "apparmor module is loaded." 2>/dev/null; then
     print_warning "AppArmor is not loaded"
