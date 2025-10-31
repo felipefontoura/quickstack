@@ -17,6 +17,8 @@ services:
       - portainer_data:/data
     networks:
       - network_public
+    ports:
+      - 9000:9000
     deploy:
       mode: replicated
       replicas: 1
