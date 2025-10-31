@@ -1,17 +1,16 @@
 services:
   postgres:
-    image: postgres:15
+    image: pgvector/pgvector:pg17
     networks:
       - network_public
-    entrypoint: docker-entrypoint.sh
-    command: [postgres, --max_connections=200]
+    command: ["postgres", "-c", "listen_addresses=*", "-c", "max_connections=200"]
     ports:
       - 5432:5432
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=secret
-      - POSTGRES_INITDB_ARGS="--auth-host=scram-sha-256"
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     deploy:
       mode: replicated
       replicas: 1
@@ -22,10 +21,21 @@ services:
         limits:
           cpus: "0.5"
           memory: 256M
+      labels:
+        - traefik.enable=false # enable it if will expose
+        - traefik.tcp.routers.postgres.rule=HostSNI(`db.example.com`)
+        - traefik.tcp.routers.postgres.entrypoints=pgsecure
+        - traefik.tcp.routers.postgres.service=postgres
+        - traefik.tcp.routers.postgres.tls=true
+        - traefik.tcp.routers.postgres.tls.certresolver=letsencryptresolver
+        - traefik.tcp.services.postgres.loadbalancer.server.port=5432
+        - traefik.tcp.middlewares.pgwhitelist.ipwhitelist.sourcerange=0.0.0.0/0 # (use CIDR notation, e.g., 203.0.113.5/32 for single IP or 10.0.0.0/24 for subnet)
+        - traefik.tcp.routers.postgres.middlewares=pgwhitelist@docker
+volumes:
+  postgres-data:
+    driver: local
 networks:
   network_public:
     external: true
     name: network_public
-volumes:
-  postgres-data:
-    driver: local
+

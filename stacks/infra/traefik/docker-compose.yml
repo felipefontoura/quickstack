@@ -2,42 +2,58 @@ services:
   traefik:
     image: traefik:v2.11
     command:
+      # Panel and providers
       - "--api.dashboard=true"
       - "--providers.docker.swarmMode=true"
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=network_public"
+
+      # Entrypoints HTTP/HTTPS
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
       - "--entrypoints.websecure.address=:443"
+
+      # Entrypoint TCP (PostgreSQL)
+      - "--entrypoints.pgsecure.address=:5432"
+
+      # Let's Encrypt
       - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
       - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.letsencryptresolver.acme.email=example@example.com"
       - "--certificatesresolvers.letsencryptresolver.acme.storage=/etc/traefik/letsencrypt/acme.json"
+
+      # Logs
       - "--log.level=DEBUG"
       - "--log.format=common"
-      - "--log.filePath=/var/log/traefik/traefik.log"
+      - "--log.filepath=/var/log/traefik/traefik.log"
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik/access-log"
+
     deploy:
       placement:
         constraints:
           - node.role == manager
       labels:
         - "traefik.enable=true"
+
+        # Redirect HTTP → HTTPS
         - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
         - "traefik.http.middlewares.redirect-https.redirectscheme.permanent=true"
         - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
         - "traefik.http.routers.http-catchall.entrypoints=web"
         - "traefik.http.routers.http-catchall.middlewares=redirect-https@docker"
         - "traefik.http.routers.http-catchall.priority=1"
+
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "vol_certificates:/etc/traefik/letsencrypt"
+
     networks:
       - network_public
+
     ports:
       - target: 80
         published: 80
@@ -45,14 +61,17 @@ services:
       - target: 443
         published: 443
         mode: host
+      - target: 5432
+        published: 5432
+        mode: host
+
 volumes:
-  vol_shared:
-    external: true
-    name: volume_swarm_shared
   vol_certificates:
     external: true
     name: volume_swarm_certificates
+
 networks:
   network_public:
     external: true
     name: network_public
+
