@@ -1,6 +1,6 @@
 services:
   evolution:
-    image: evoapicloud/evolution-api:v2.3.0
+    image: evoapicloud/evolution-api:latest
     command: ["node", "./dist/src/main.js"]
     networks:
       - network_public
@@ -40,7 +40,7 @@ services:
 
       - DATABASE_ENABLED=true
       - DATABASE_PROVIDER=postgresql
-      - DATABASE_CONNECTION_URI=postgresql://evolution:secret@postgres:5432/evolution?schema=public
+      - DATABASE_CONNECTION_URI=postgresql://postgres:secret@postgres:5432/evolution?schema=public
       - DATABASE_SAVE_DATA_INSTANCE=true
       - DATABASE_SAVE_DATA_NEW_MESSAGE=true
       - DATABASE_SAVE_MESSAGE_UPDATE=true

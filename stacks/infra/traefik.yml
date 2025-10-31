@@ -74,4 +74,3 @@ networks:
   network_public:
     external: true
     name: network_public
-

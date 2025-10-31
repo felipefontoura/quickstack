@@ -1,7 +1,5 @@
 x-n8n-common: &n8n-common
-  image: n8n-custom:latest
-  build:
-    dockerfile: Dockerfile
+  image: n8nio/n8n:latest
   networks:
     - network_public
   environment: &n8n-env
@@ -19,7 +17,7 @@ x-n8n-common: &n8n-common
     - DB_POSTGRESDB_DATABASE=n8n
     - DB_POSTGRESDB_HOST=postgres
     - DB_POSTGRESDB_PORT=5432
-    - DB_POSTGRESDB_USER=n8n
+    - DB_POSTGRESDB_USER=postgres
     - DB_POSTGRESDB_PASSWORD=secret
 
     - N8N_PORT=5678
@@ -74,13 +72,13 @@ x-n8n-common: &n8n-common
     # - N8N_SMTP_SSL=true
 
     # Sendgrid
-    - N8N_EMAIL_MODE=smtp
-    - N8N_SMTP_HOST=smtp.sendgrid.net
-    - N8N_SMTP_PORT=587
-    - N8N_SMTP_USER=user
-    - N8N_SMTP_PASS=secret
-    - N8N_SMTP_SENDER=no-reply@website.com
-    - N8N_SMTP_SSL=true
+    # - N8N_EMAIL_MODE=smtp
+    # - N8N_SMTP_HOST=smtp.sendgrid.net
+    # - N8N_SMTP_PORT=587
+    # - N8N_SMTP_USER=user
+    # - N8N_SMTP_PASS=secret
+    # - N8N_SMTP_SENDER=no-reply@website.com
+    # - N8N_SMTP_SSL=true
   deploy: &n8n-deploy
     mode: replicated
     replicas: 1

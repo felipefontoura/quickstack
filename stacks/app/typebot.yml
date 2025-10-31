@@ -2,7 +2,7 @@ x-typebot-common: &typebot-common
   networks:
     - network_public
   environment: &typebot-env
-    - DATABASE_URL=postgresql://typebot:secret@postgres:5432/typebot
+    - DATABASE_URL=postgresql://postgres:secret@postgres:5432/typebot
 
     - ENCRYPTION_SECRET=secret
 
@@ -10,29 +10,29 @@ x-typebot-common: &typebot-common
     - NEXTAUTH_URL=https://builder.bot.website.com
     - NEXT_PUBLIC_VIEWER_URL=https://bot.website.com
     - NEXTAUTH_URL_INTERNAL=http://localhost:3000
- 
+
     - DISABLE_SIGNUP=true
- 
+
     - ADMIN_EMAIL=example@example.com
     - NEXT_PUBLIC_SMTP_FROM='Typebot' <no-reply@website.com>
-    - SMTP_AUTH_DISABLED=false
-    - SMTP_HOST=smtp.sendgrid.net
-    - SMTP_PORT=587
-    - SMTP_USERNAME=user
-    - SMTP_PASSWORD=secret
-    - SMTP_SECURE=true
- 
-    - NEXT_PUBLIC_GOOGLE_API_KEY=xxx
-    - GOOGLE_CLIENT_ID=xxx
-    - GOOGLE_CLIENT_SECRET=xxx
- 
-    - S3_ACCESS_KEY=xxx
-    - S3_SECRET_KEY=xxx
-    - S3_BUCKET=website.com-typebot
-    - S3_REGION=us-east-1
-    - S3_ENDPOINT=s3.us-east-1.amazonaws.com
- 
-    - NEXT_PUBLIC_GIPHY_API_KEY=xxx
+    - SMTP_AUTH_DISABLED=true
+    # - SMTP_HOST=smtp.sendgrid.net
+    # - SMTP_PORT=587
+    # - SMTP_USERNAME=user
+    # - SMTP_PASSWORD=secret
+    # - SMTP_SECURE=true
+
+    # - NEXT_PUBLIC_GOOGLE_API_KEY=xxx
+    # - GOOGLE_CLIENT_ID=xxx
+    # - GOOGLE_CLIENT_SECRET=xxx
+
+    # - S3_ACCESS_KEY=xxx
+    # - S3_SECRET_KEY=xxx
+    # - S3_BUCKET=website.com-typebot
+    # - S3_REGION=us-east-1
+    # - S3_ENDPOINT=s3.us-east-1.amazonaws.com
+
+    # - NEXT_PUBLIC_GIPHY_API_KEY=xxx
   deploy: &typebot-deploy
     mode: replicated
     replicas: 1
@@ -77,4 +77,3 @@ networks:
   network_public:
     external: true
     name: network_public
-

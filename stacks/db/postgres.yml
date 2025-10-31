@@ -3,7 +3,8 @@ services:
     image: pgvector/pgvector:pg17
     networks:
       - network_public
-    command: ["postgres", "-c", "listen_addresses=*", "-c", "max_connections=200"]
+    command:
+      ["postgres", "-c", "listen_addresses=*", "-c", "max_connections=200"]
     ports:
       - 5432:5432
     environment:
@@ -23,7 +24,7 @@ services:
           memory: 256M
       labels:
         - traefik.enable=false # enable it if will expose
-        - traefik.tcp.routers.postgres.rule=HostSNI(`db.example.com`)
+        - traefik.tcp.routers.postgres.rule=HostSNI(`db.website.com`)
         - traefik.tcp.routers.postgres.entrypoints=pgsecure
         - traefik.tcp.routers.postgres.service=postgres
         - traefik.tcp.routers.postgres.tls=true
@@ -38,4 +39,3 @@ networks:
   network_public:
     external: true
     name: network_public
-
