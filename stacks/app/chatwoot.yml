@@ -34,7 +34,7 @@ x-chatwoot-common: &chatwoot-common
     - POSTGRES_PASSWORD=secret
 
     # Redis Configuration
-    - REDIS_URL=redis://redis:6379
+    - REDIS_URL=redis://redis:6379/3
 
     # Storage Configuration
     - ACTIVE_STORAGE_SERVICE=local

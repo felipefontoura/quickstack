@@ -10,7 +10,7 @@ services:
       - NEXT_PUBLIC_API_URI=https://plunk.website.com/api
 
       - DATABASE_URL=postgresql://plunk:secret@postgres:5432/plunk
-      - REDIS_URL=redis://redis:6379/2
+      - REDIS_URL=redis://redis:6379/4
 
       - JWT_SECRET=secret
 
